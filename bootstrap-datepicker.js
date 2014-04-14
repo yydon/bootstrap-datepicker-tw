@@ -1,11 +1,9 @@
-﻿/* =========================================================
- * bootstrap-datepicker.js
- * Repo: https://github.com/eternicode/bootstrap-datepicker/
- * Demo: http://eternicode.github.io/bootstrap-datepicker/
- * Docs: http://bootstrap-datepicker.readthedocs.org/
- * Forked from http://www.eyecon.ro/bootstrap-datepicker
+/* =========================================================
+ * bootstrap-datepicker-tw.js
+ * Repo: https://github.com/yydon/bootstrap-datepicker-tw
+ * Forked from https://github.com/eternicode/bootstrap-datepicker/
  * =========================================================
- * Started by Stefan Petre; improvements by Andrew Rowls + contributors
+ * Started by Stefan Petre, Andrew Rowls; improvements by Zion Wu
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1419,7 +1417,7 @@
         daysOfWeekDisabled: [],
         endDate: Infinity,
         forceParse: true,
-        format: 'mm/dd/yyyy',
+        format: 'twy/mm/dd',
         keyboardNavigation: true,
         //language: 'en',
         language: 'zh-TW',
@@ -1430,8 +1428,7 @@
         rtl: false,
         startDate: -Infinity,
         startView: 0,
-        //todayBtn: false,
-        todayBtn: "linked",
+        todayBtn: false,
         todayHighlight: true,
         weekStart: 0
     };
@@ -1488,7 +1485,7 @@
         getDaysInMonth: function(year, month){
             return [31, (DPGlobal.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
         },
-        validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?|twy/g,
+        validParts: /dd?|DD?|mm?|MM?|yy(?:yy)?|twy?/g,
         nonpunctuation: /[^ -\/:-@\[\u3400-\u9fff-`{-~\t\n\r]+/g,
         parseFormat: function(format){
             // IE treats \0 as a string end in inputs (truncating the value),
@@ -1578,6 +1575,21 @@
                     p = parts[i].slice(0, m.length);
                 return m === p;
             }
+            if (parts.length == 1 && parts.length !== fparts.length)
+            {
+                var v = parts[0];
+                var len;
+                for(i=0, len=0; i<fparts.length; i++)
+                {
+                    if (len + fparts[i].length > v.length) {
+                        parts[i] = v.substr(len, v.length);
+                        break;
+                    }
+                    parts[i] = v.substr(len, fparts[i].length);
+                    len += fparts[i].length;
+                }
+            }
+
             if (parts.length === fparts.length){
                 var cnt;
                 for (i=0, cnt = fparts.length; i < cnt; i++){
@@ -1628,6 +1640,7 @@
             };
             val.dd = (val.d < 10 ? '0' : '') + val.d;
             val.mm = (val.m < 10 ? '0' : '') + val.m;
+            val.twy = (val.twy < 100 ? '0' : '') + val.twy;
             date = [];
             var seps = $.extend([], format.separators);
             for (var i=0, cnt = format.parts.length; i <= cnt; i++){
